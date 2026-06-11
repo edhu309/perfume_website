@@ -1,8 +1,8 @@
 
 
 
-import React from "react";
-import { perfumes } from "../data/perfumes";
+import React, { useEffect, useState } from "react";
+import api from "../services/api";
 import { motion } from "framer-motion";
 import { useCart } from "./CartContext";
 
@@ -10,65 +10,92 @@ import { useCart } from "./CartContext";
 
 const FeaturedPerfumes = () => {
   const { dispatch } = useCart();
-  return (
-    <section className="py-24 relative z-20">
-      <h2 className="text-4xl md:text-5xl font-display font-light text-luxurySilver mb-14 text-center tracking-wide">Featured Perfumes</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12 max-w-6xl mx-auto px-4">
-        {perfumes.map((perfume, idx) => (
-          <motion.div
-            key={perfume.id}
-            initial={{ opacity: 0, y: 80, scale: 0.92 }}
-            whileInView={{
-              opacity: 1,
-              y: 0,
-              scale: 1
-            }}
-            transition={{ duration: 1.1, delay: idx * 0.18, ease: [0.4, 0.2, 0.2, 1] }}
-            viewport={{ once: true, amount: 0.4 }}
-            className="group bg-luxurySurface/80 rounded-2xl overflow-hidden shadow-lg transition-shadow duration-700 cursor-pointer relative backdrop-blur-md border border-luxurySilver/30"
-          >
-            <motion.img
-              src={perfume.image}
-              alt={perfume.name}
-              className="w-full h-72 object-cover group-hover:scale-105 transition-transform duration-700 rounded-xl border-2 border-[#38BDF8]/40 shadow"
-              initial={{ scale: 0.92, opacity: 0, filter: 'blur(8px)' }}
-              whileInView={{ scale: 1, opacity: 1, filter: 'blur(0px)' }}
-              transition={{ duration: 1.2, delay: idx * 0.22, ease: [0.4, 0.2, 0.2, 1] }}
-              viewport={{ once: true, amount: 0.5 }}
-            />
-            <div className="p-7 flex flex-col items-center">
-              <motion.h3
-                className="text-2xl font-display font-light text-[#C0C0C0] mb-2 group-hover:text-[#38BDF8] transition-all tracking-wide drop-shadow"
-                initial={{ opacity: 0, y: 30, color: '#C0C0C0' }}
-                whileInView={{ opacity: 1, y: 0, color: '#38BDF8' }}
-                transition={{ duration: 0.8, delay: idx * 0.22 + 0.2 }}
-                viewport={{ once: true, amount: 0.7 }}
-              >
-                {perfume.name}
-              </motion.h3>
-              <motion.p
-                className="text-lg mb-4 text-[#38BDF8] font-semibold drop-shadow"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: idx * 0.22 + 0.3 }}
-                viewport={{ once: true, amount: 0.7 }}
-              >
-                ${perfume.price}
-              </motion.p>
-              <motion.button
-                className="px-7 py-2 rounded-full border-2 border-[#38BDF8] text-[#C0C0C0] font-semibold bg-[#0F172A]/60 backdrop-blur-md shadow hover:bg-[#38BDF8] hover:text-[#0F172A] transition-all duration-300 mt-2"
-                whileHover={{ scale: 1.12, backgroundColor: '#38BDF8', color: '#0F172A', borderColor: '#C0C0C0' }}
-                transition={{ type: 'spring', stiffness: 300 }}
-                onClick={() => dispatch({ type: "ADD_TO_CART", product: perfume })}
-              >
-                Add to Cart
-              </motion.button>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-    </section>
-  );
-};
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-export default FeaturedPerfumes;
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        const res = await api.get("/products?section=featured");
+        setProducts(res.data);
+      } catch (err) {
+        setError("Failed to load products");
+      }
+      setLoading(false);
+    };
+    fetchProducts();
+  }, []);
+
+  return (
+      <section className="py-24 relative z-20">
+        <h2 className="text-4xl md:text-5xl font-display font-light text-luxurySilver mb-14 text-center tracking-wide">Featured Perfumes</h2>
+        {loading ? (
+          <div className="text-center text-xl text-gray-500">Loading...</div>
+        ) : error ? (
+          <div className="text-center text-red-600">{error}</div>
+        ) : products.length === 0 ? (
+          <div className="text-center text-gray-500">No products found.</div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12 max-w-6xl mx-auto px-4">
+            {products.map((perfume, idx) => {
+              let imgSrc = perfume.image;
+              return (
+                <motion.div
+                  key={perfume._id || perfume.id}
+                  initial={{ opacity: 0, y: 80, scale: 0.92 }}
+                  whileInView={{
+                    opacity: 1,
+                    y: 0,
+                    scale: 1
+                  }}
+                  transition={{ duration: 1.1, delay: idx * 0.18, ease: [0.4, 0.2, 0.2, 1] }}
+                  viewport={{ once: true, amount: 0.4 }}
+                  className="group bg-[#1e293b] rounded-2xl overflow-hidden shadow-lg transition-shadow duration-700 cursor-pointer relative backdrop-blur-md border border-[#38BDF8]/30"
+                >
+                  <motion.img
+                    src={imgSrc}
+                    alt={perfume.name}
+                    className="w-full h-72 object-cover group-hover:scale-105 transition-transform duration-700 rounded-xl border-2 border-[#38BDF8]/40 shadow"
+                    initial={{ scale: 0.92, opacity: 0, filter: 'blur(8px)' }}
+                    whileInView={{ scale: 1, opacity: 1, filter: 'blur(0)' }}
+                    transition={{ duration: 0.8 }}
+                  />
+                  <div className="p-6 flex flex-col gap-2">
+                    <h3 className="text-2xl font-display text-[#C0C0C0] mb-2">{perfume.name}</h3>
+                    <p className="text-[#C0C0C0] text-sm mb-2">{perfume.description}</p>
+                    {perfume.notes && (
+                      <div className="flex flex-wrap gap-2 mb-2">
+                        {Object.entries(perfume.notes).map(([noteType, notes]) => (
+                          <span key={noteType} className="bg-blue-900/60 text-xs text-luxurySilver px-2 py-1 rounded">
+                            {noteType.charAt(0).toUpperCase() + noteType.slice(1)}: {Array.isArray(notes) ? notes.join(", ") : notes}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                    <div className="text-xl font-semibold text-[#38BDF8] mt-2">${perfume.price}</div>
+                    <div className="flex gap-3 mt-4">
+                      <button
+                        onClick={() => dispatch({ type: "ADD_TO_CART", product: perfume })}
+                        className="flex-1 px-4 py-2 rounded-full border-2 border-[#38BDF8] text-[#38BDF8] font-semibold bg-[#0F172A] hover:bg-[#38BDF8] hover:text-[#0F172A] transition-all duration-300"
+                      >
+                        Add to Cart
+                      </button>
+                      <button
+                        onClick={() => dispatch({ type: "ADD_TO_CART", product: perfume })}
+                        className="flex-1 px-4 py-2 rounded-full border-2 border-[#38BDF8] text-[#0F172A] font-semibold bg-[#38BDF8] hover:bg-[#C0C0C0] hover:text-[#38BDF8] transition-all duration-300"
+                      >
+                        Buy Now
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        )}
+      </section>
+    );
+  }
+  export default FeaturedPerfumes;

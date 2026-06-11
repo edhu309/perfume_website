@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { perfumes } from "../data/perfumes";
+import api from "../services/api";
 import { useCart } from "./CartContext";
 
 
 const ExplorePopup = ({ open, onClose }) => {
   const { dispatch } = useCart();
   const [search, setSearch] = useState("");
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
     if (open) {
       document.body.classList.add("overflow-hidden");
+      api.get("/products?section=explore").then((res) => setProducts(res.data)).catch(() => {});
     } else {
       document.body.classList.remove("overflow-hidden");
     }
@@ -20,7 +22,7 @@ const ExplorePopup = ({ open, onClose }) => {
 
   if (!open) return null;
 
-  const filtered = perfumes.filter(p =>
+  const filtered = products.filter(p =>
     p.name.toLowerCase().includes(search.toLowerCase()) ||
     p.description.toLowerCase().includes(search.toLowerCase())
   );
@@ -43,7 +45,7 @@ const ExplorePopup = ({ open, onClose }) => {
             <div className="col-span-2 text-center text-[#38BDF8] text-lg">No perfumes found.</div>
           )}
           {filtered.map(perfume => (
-            <div key={perfume.id} className="bg-[#1e293b] rounded-2xl p-6 flex flex-col items-center border border-[#38BDF8]/30 shadow-lg">
+            <div key={perfume._id || perfume.id} className="bg-[#1e293b] rounded-2xl p-6 flex flex-col items-center border border-[#38BDF8]/30 shadow-lg">
               <img src={perfume.image} alt={perfume.name} className="w-40 h-40 object-cover rounded-xl mb-4 border-2 border-[#38BDF8]/40" />
               <div className="text-2xl font-display text-[#C0C0C0] mb-1">{perfume.name}</div>
               <div className="text-[#38BDF8] font-semibold mb-2">${perfume.price}</div>

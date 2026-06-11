@@ -1,30 +1,51 @@
 
 import React from "react";
+import { useLocation } from "react-router-dom";
+import CustomFragrancePopup from "../components/CustomFragrancePopup";
 import NavBar from "../components/NavBar";
 import FeaturedPerfumes from "../components/FeaturedPerfumes";
 import Carousel from "../components/Carousel";
 import carousel1 from "../assets/carousel1.jpg";
 import carousel2 from "../assets/carousel2.jpg";
 import carousel3 from "../assets/carousel3.jpg";
+
 import ScrollStory from "../components/ScrollStory";
 import Cart from "../components/Cart";
 import AuthFormPopup from "../components/AuthFormPopup";
+import AdminAuthFormPopup from "../components/AdminAuthFormPopup";
 import ExplorePopup from "../components/ExplorePopup";
 import { useUser } from "../components/UserContext";
+import SuccessPopup from "../components/SuccessPopup";
 
 
 
 
 const Home = () => {
   const { user } = useUser();
+  const location = useLocation();
   const [authOpen, setAuthOpen] = React.useState(false);
+  const [adminAuthOpen, setAdminAuthOpen] = React.useState(false);
   const [exploreOpen, setExploreOpen] = React.useState(false);
+  const [successMsg, setSuccessMsg] = React.useState("");
+  const [customPopupOpen, setCustomPopupOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    if (location.state?.scrollTo) {
+      const el = document.getElementById(location.state.scrollTo);
+      if (el) setTimeout(() => el.scrollIntoView({ behavior: "smooth" }), 100);
+      // Clear the state so it doesn't re-scroll on subsequent renders
+      window.history.replaceState({}, "");
+    }
+  }, [location.state]);
   return (
     <div className="relative w-full min-h-screen flex flex-col items-stretch justify-center">
-      <NavBar onLoginClick={() => setAuthOpen(true)} />
-      <AuthFormPopup open={authOpen} onClose={() => setAuthOpen(false)} />
+      <NavBar onLoginClick={() => setAuthOpen(true)} onAdminLoginClick={() => setAdminAuthOpen(true)} />
+      <AuthFormPopup open={authOpen} onClose={() => setAuthOpen(false)} setSuccessMsg={setSuccessMsg} />
+      <AdminAuthFormPopup open={adminAuthOpen} onClose={() => setAdminAuthOpen(false)} setSuccessMsg={setSuccessMsg} />
+      <SuccessPopup message={successMsg} onClose={() => setSuccessMsg("")} />
       <ExplorePopup open={exploreOpen} onClose={() => setExploreOpen(false)} />
-      {user && <Cart />}
+      <CustomFragrancePopup open={customPopupOpen} onClose={() => setCustomPopupOpen(false)} userPhone={user?.phone || ""} />
+      {user && user.role !== "admin" && <Cart />}
       <section
         className="relative w-full flex flex-col items-stretch justify-center"
         style={{
@@ -54,11 +75,11 @@ const Home = () => {
             <Carousel images={[carousel1, carousel2, carousel3]} autoSlide interval={3000} />
             <div className="mt-4 flex flex-col items-center">
               <div className="text-2xl md:text-3xl text-[#C0C0C0] font-serif italic font-semibold text-center tracking-wide drop-shadow" style={{letterSpacing: '0.04em'}}>
-                Build Your Scent
+                Craft Your Scent
               </div>
               <button
                 className="mt-5 px-8 py-3 rounded-full border-2 border-[#38BDF8] text-[#38BDF8] font-semibold text-lg md:text-xl bg-[#0F172A]/80 backdrop-blur-md shadow hover:bg-[#38BDF8] hover:text-[#0F172A] transition-all duration-300"
-                onClick={() => window.open('mailto:admin@example.com?subject=Custom%20Perfume%20Request', '_blank')}
+                onClick={() => setCustomPopupOpen(true)}
               >
                 Request Custom Fragrance
               </button>
