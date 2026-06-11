@@ -18,7 +18,7 @@ const CustomFragrancePopup = ({ open, onClose, userPhone }) => {
       return;
     }
     setError("");
-    const adminNumber = "919207451758";
+    const adminNumber = "919037286318";
     const msg =
       `Custom Fragrance Request\n` +
       `Phone: ${phone}\n` +

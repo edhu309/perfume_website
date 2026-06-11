@@ -12,7 +12,7 @@ const Contact = () => {
   const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
   const [sent, setSent] = useState(false);
 
-  const adminNumber = "919207451758";
+  const adminNumber = "919037286318";
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -115,7 +115,7 @@ const Contact = () => {
                 rel="noopener noreferrer"
                 className="text-[#38BDF8] text-lg hover:underline"
               >
-                +91 9207451758
+                +91 9037286318
               </a>
               <p className="text-[#94A3B8] text-sm mt-1">Available Mon–Sat, 10 AM – 8 PM</p>
             </div>

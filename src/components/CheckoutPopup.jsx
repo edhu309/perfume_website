@@ -21,7 +21,7 @@ const CheckoutPopup = ({ open, onClose, user, cartItems }) => {
     }
     setError("");
     // Compose WhatsApp message (professional, no % symbols)
-    const adminNumber = "919207451758"; // <-- Replace with your number for testing
+    const adminNumber = "919037286318";
     const orderDetails = cartItems.map(item => `${item.name} x${item.quantity} - ₹${item.price * item.quantity}`).join("\n");
     const msg =
       `New Perfume Order!\n` +
