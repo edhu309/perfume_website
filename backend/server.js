@@ -35,9 +35,6 @@ const upload = multer({
   },
 });
 
-// Load env variables
-dotenv.config();
-
 // Connect to MongoDB
 connectDB();
 
