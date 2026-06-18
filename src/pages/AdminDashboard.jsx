@@ -14,7 +14,7 @@ const initialForm = {
   sections: ["featured"],
 };
 
-const BACKEND = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+const BACKEND = import.meta.env.VITE_BACKEND_URL || "https://scentra-backend.onrender.com";
 const categories = ["woody", "fresh", "oriental", "floral", "citrus", "spicy"];
 const sectionOptions = [
   { value: "featured", label: "Featured Perfumes" },
