@@ -82,7 +82,10 @@ export default function AdminDashboard() {
       const res = await api.post("/upload", data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      setForm((prev) => ({ ...prev, image: BACKEND + res.data.imageUrl }));
+      setForm((prev) => ({
+  ...prev,
+  image: res.data.imageUrl
+}));
     } catch (err) {
       setError(err.response?.data?.message || "Image upload failed");
     }
