@@ -4,6 +4,8 @@ const dotenv = require("dotenv");
 const path = require("path");
 const fs = require("fs");
 const multer = require("multer");
+const cloudinary = require("./config/cloudinary");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 dotenv.config({ path: path.join(__dirname, ".env") });
 const connectDB = require("./config/db");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
@@ -12,16 +14,11 @@ const adminMiddleware = require("./middleware/adminMiddleware");
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./config/swagger");
 
-// Ensure uploads directory exists
-const uploadsDir = path.join(__dirname, "uploads");
-if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir);
-
-// Multer config: store to disk, keep original extension
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, uploadsDir),
-  filename: (req, file, cb) => {
-    const unique = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-    cb(null, unique + path.extname(file.originalname));
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "auramist-products",
+    allowed_formats: ["jpg", "jpeg", "png", "webp"],
   },
 });
 const upload = multer({
@@ -44,10 +41,6 @@ const app = express();
 app.use(cors({ origin: process.env.FRONTEND_URL || "http://localhost:5173", credentials: true }));
 app.use(express.json());
 
-// Serve uploaded images as static files
-app.use("/uploads", express.static(uploadsDir));
-
-// Image upload endpoint (admin only)
 app.post(
   "/api/upload",
   protect,
@@ -57,8 +50,10 @@ app.post(
     if (!req.file) {
       return res.status(400).json({ message: "No file uploaded" });
     }
-    const imageUrl = `/uploads/${req.file.filename}`;
-    res.json({ imageUrl });
+
+    res.json({
+      imageUrl: req.file.path,
+    });
   }
 );
 
