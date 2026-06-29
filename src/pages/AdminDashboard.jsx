@@ -72,6 +72,7 @@ export default function AdminDashboard() {
   };
 
   const handleImageUpload = async (e) => {
+    console.log("Image upload function called");
     const file = e.target.files[0];
     if (!file) return;
     setUploading(true);
