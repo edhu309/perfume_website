@@ -83,7 +83,9 @@ export default function AdminDashboard() {
       const res = await api.post("/upload", data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      setForm((prev) => ({
+     console.log("UPLOAD RESPONSE:", res.data);
+
+setForm((prev) => ({
   ...prev,
   image: res.data.imageUrl
 }));
