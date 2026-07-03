@@ -3,25 +3,55 @@ import { useCart } from "./CartContext";
 import { useUser } from "./UserContext";
 import CheckoutPopup from "./CheckoutPopup";
 
-const Cart = () => {
+const Cart = ({ open, onClose }) => {
   const { cart, dispatch } = useCart();
   const { user } = useUser();
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const total = cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  if (!open) return null;
 
   if (cart.items.length === 0) {
-    return (
-      <div className="fixed top-24 right-8 bg-luxurySurface/95 shadow-silver-glow rounded-2xl p-7 w-96 z-50 border border-luxurySilver/30 backdrop-blur-md">
-        <h3 className="text-2xl font-display font-semibold mb-4 text-luxuryGlow tracking-wide drop-shadow">Your Cart</h3>
-        <p className="text-luxuryMuted text-lg">Cart is empty.</p>
+  return (
+    <div className="fixed top-24 right-8 bg-luxurySurface/95 shadow-silver-glow rounded-2xl p-7 w-96 z-50 border border-luxurySilver/30 backdrop-blur-md">
+
+      <div className="flex justify-between items-center mb-4">
+
+        <h3 className="text-2xl font-display font-semibold text-luxuryGlow">
+          Your Cart
+        </h3>
+
+        <button
+          onClick={onClose}
+          className="text-2xl text-red-400 hover:text-red-600"
+        >
+          ✕
+        </button>
+
       </div>
-    );
-  }
+
+      <p className="text-luxuryMuted text-lg">
+        Cart is empty.
+      </p>
+
+    </div>
+  );
+}
 
   return (
     <>
       <div className="fixed top-24 right-8 bg-luxurySurface/95 shadow-silver-glow rounded-2xl p-7 w-96 z-50 border border-luxurySilver/30 backdrop-blur-md">
-        <h3 className="text-2xl font-display font-semibold mb-4 text-luxuryGlow tracking-wide drop-shadow">Your Cart</h3>
+        <div className="flex justify-between items-center mb-4">
+  <h3 className="text-2xl font-display font-semibold text-luxuryGlow tracking-wide drop-shadow">
+    Your Cart
+  </h3>
+
+  <button
+    onClick={onClose}
+    className="text-2xl text-red-400 hover:text-red-600 transition"
+  >
+    ✕
+  </button>
+</div>
         <ul className="mb-6 divide-y divide-luxurySilver/20">
           {cart.items.map(item => (
             <li key={item._id || item.id} className="flex items-center justify-between py-3 group">

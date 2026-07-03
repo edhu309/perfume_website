@@ -11,9 +11,35 @@ const ScrollStory = () => {
   }, []);
 
   return (
-  <section className="py-28 relative z-20">
-    <h2 className="text-4xl md:text-5xl font-display font-light text-luxurySilver mb-8 text-center tracking-wide">Discover the Collection</h2>
-    <div className="flex flex-col gap-24 max-w-3xl mx-auto">
+  <section
+className="
+relative
+z-20
+py-14
+sm:py-16
+md:py-20
+lg:py-28
+"
+>
+    <h2 className="text-3xl
+sm:text-4xl
+md:text-5xl font-display font-light text-luxurySilver mb-8
+sm:mb-10
+md:mb-12 text-center tracking-wide">Discover the Collection</h2>
+    <div
+className="
+flex
+flex-col
+gap-10
+sm:gap-16
+lg:gap-24
+max-w-6xl
+mx-auto
+px-4
+sm:px-6
+lg:px-8
+"
+>
       {products.map((perfume, idx) => (
         <motion.div
           key={perfume._id || perfume.id}
@@ -25,21 +51,38 @@ const ScrollStory = () => {
           }}
           transition={{ duration: 1.1, delay: idx * 0.18, ease: [0.4, 0.2, 0.2, 1] }}
           viewport={{ once: true, amount: 0.5 }}
-          className="flex flex-col md:flex-row items-center gap-10 bg-[#0F172A]/80 rounded-2xl p-10 border-2 border-[#38BDF8]/30 backdrop-blur-md shadow-lg"
+          className="flex flex-col md:flex-row items-center gap-6
+sm:gap-8
+md:gap-10 bg-[#0F172A]/80 rounded-2xl p-5
+sm:p-6
+md:p-8
+lg:p-10 border-2 border-[#38BDF8]/30 backdrop-blur-md shadow-lg"
         >
           <motion.img
+          loading="lazy"
             src={perfume.image}
             alt={perfume.name}
-            className="w-48 h-48 object-cover rounded-xl border-2 border-[#C0C0C0]/40 shadow"
+            className="w-36
+h-36
+sm:w-44
+sm:h-44
+md:w-48
+md:h-48 object-cover rounded-xl border-2 border-[#C0C0C0]/40 shadow"
             initial={{ scale: 0.92, opacity: 0, filter: 'blur(8px)' }}
             whileInView={{ scale: 1, opacity: 1, filter: 'blur(0px)' }}
             transition={{ duration: 1.2, delay: idx * 0.22, ease: [0.4, 0.2, 0.2, 1] }}
             viewport={{ once: true, amount: 0.5 }}
           />
           <div className="flex-1 text-center md:text-left">
-            <h3 className="text-2xl font-display font-light text-[#38BDF8] mb-2 tracking-wide drop-shadow">{perfume.name}</h3>
-            <p className="text-[#C0C0C0] mb-2">{perfume.description}</p>
-            <span className="inline-block px-4 py-1 border-2 border-[#38BDF8] text-[#C0C0C0] rounded-full text-sm font-semibold mt-2 bg-[#38BDF8]/10 backdrop-blur-md">
+            <h3 className="text-xl
+sm:text-2xl font-display font-light text-[#38BDF8] mb-2 tracking-wide drop-shadow">{perfume.name}</h3>
+            <p className="text-[#C0C0C0]
+leading-7 mb-2">{perfume.description}</p>
+            <span className="inline-block px-3
+sm:px-4
+py-1
+text-xs
+sm:text-sm border-2 border-[#38BDF8] text-[#C0C0C0] rounded-full text-sm font-semibold mt-2 bg-[#38BDF8]/10 backdrop-blur-md">
               {perfume.category}
             </span>
           </div>

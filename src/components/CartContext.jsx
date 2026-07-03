@@ -46,8 +46,21 @@ const cartReducer = (state, action) => {
 
 export const CartProvider = ({ children }) => {
   const [state, dispatch] = useReducer(cartReducer, { items: [] });
+
+  // Total quantity of all products
+  const cartCount = state.items.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
+
   return (
-    <CartContext.Provider value={{ cart: state, dispatch }}>
+    <CartContext.Provider
+      value={{
+        cart: state,
+        dispatch,
+        cartCount,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );
