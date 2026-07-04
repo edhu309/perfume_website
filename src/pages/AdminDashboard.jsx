@@ -420,7 +420,7 @@ setForm((prev) => ({
                           {product.category}
                         </span>
                       </td>
-                      <td className="py-3 text-[#38BDF8] font-semibold">${product.price}</td>
+                      <td className="py-3 text-[#38BDF8] font-semibold">₹{product.price}</td>
                       <td className="py-3 text-luxuryMuted">{product.stock}</td>
                       <td className="py-3">
                         <div className="flex flex-wrap gap-1">

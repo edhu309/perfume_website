@@ -111,7 +111,7 @@ leading-6 mb-2">{perfume.description}</p>
                       </div>
                     )}
                     <div className="text-lg
-sm:text-xl font-semibold text-[#38BDF8] mt-2">${perfume.price}</div>
+sm:text-xl font-semibold text-[#38BDF8] mt-2">₹{perfume.price}</div>
                     <div
 className="
 flex

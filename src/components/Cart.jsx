@@ -65,7 +65,7 @@ const Cart = ({ open, onClose }) => {
                 </div>
               </div>
               <div className="flex flex-col items-end">
-                <span className="text-luxuryGlow font-semibold text-lg">${item.price * item.quantity}</span>
+                <span className="text-luxuryGlow font-semibold text-lg">₹{item.price * item.quantity}</span>
                 <button
                   className="mt-1 text-xs text-red-400 hover:text-white hover:bg-red-400 px-2 py-1 rounded transition"
                   onClick={() => dispatch({ type: "REMOVE_FROM_CART", id: item._id || item.id })}
@@ -78,7 +78,7 @@ const Cart = ({ open, onClose }) => {
         </ul>
         <div className="flex justify-between items-center mb-6">
           <span className="text-lg text-luxuryMuted font-medium">Total:</span>
-          <span className="text-2xl font-display text-luxuryGlow font-bold drop-shadow">${total}</span>
+          <span className="text-2xl font-display text-luxuryGlow font-bold drop-shadow">₹{total}</span>
         </div>
         <button
           className="w-full bg-luxuryGlow text-luxuryBg font-display text-lg py-3 rounded-full shadow-blue-glow hover:bg-luxuryBg hover:text-luxuryGlow border-2 border-luxuryGlow transition-all duration-300"
