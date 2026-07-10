@@ -25,6 +25,7 @@ const Home = () => {
   const [successMsg, setSuccessMsg] = React.useState("");
   const [customPopupOpen, setCustomPopupOpen] = React.useState(false);
   const [cartOpen, setCartOpen] = React.useState(false);
+  const [showLoginReminder, setShowLoginReminder] = React.useState(false);
 
   React.useEffect(() => {
     if (location.state?.scrollTo) {
@@ -40,6 +41,7 @@ const Home = () => {
   onLoginClick={() => setAuthOpen(true)}
   onAdminLoginClick={() => setAdminAuthOpen(true)}
   onCartClick={() => setCartOpen(true)}
+  showLoginReminder={showLoginReminder}
 />
       <AuthFormPopup
         open={authOpen}
@@ -52,18 +54,35 @@ const Home = () => {
         setSuccessMsg={setSuccessMsg}
       />
       <SuccessPopup message={successMsg} onClose={() => setSuccessMsg("")} />
-      <ExplorePopup open={exploreOpen} onClose={() => setExploreOpen(false)} />
+      <ExplorePopup
+    open={exploreOpen}
+    onClose={() => setExploreOpen(false)}
+    onRequireLogin={() => {
+        setShowLoginReminder(true);
+
+        setTimeout(() => {
+            setShowLoginReminder(false);
+        }, 3000);
+    }}
+/>
       <CustomFragrancePopup
         open={customPopupOpen}
         onClose={() => setCustomPopupOpen(false)}
         userPhone={user?.phone || ""}
       />
-      {user && user.role !== "admin" && (
-  <Cart
-    open={cartOpen}
-    onClose={() => setCartOpen(false)}
-  />
-)}
+      
+ <Cart
+  open={cartOpen}
+  onClose={() => setCartOpen(false)}
+  onRequireLogin={() => {
+    setShowLoginReminder(true);
+
+    setTimeout(() => {
+      setShowLoginReminder(false);
+    }, 3000);
+  }}
+/>
+
       <section
         className="relative w-full flex flex-col items-stretch justify-center"
         style={{
@@ -160,7 +179,15 @@ md:text-xl bg-[#0F172A]/80 backdrop-blur-md shadow hover:bg-[#38BDF8] hover:text
           </div>
         </div>
         <div id="featured-perfumes-section">
-          <FeaturedPerfumes />
+          <FeaturedPerfumes
+  onRequireLogin={() => {
+    setShowLoginReminder(true);
+
+    setTimeout(() => {
+      setShowLoginReminder(false);
+    }, 3000);
+  }}
+/>
         </div>
         <ScrollStory />
       </section>

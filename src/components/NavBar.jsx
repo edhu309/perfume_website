@@ -18,6 +18,7 @@ const NavBar = ({
   onLoginClick,
   onAdminLoginClick,
   onCartClick,
+  showLoginReminder,
 }) => {
   const { user, logout } = useUser();
   const { cartCount } = useCart();
@@ -45,7 +46,7 @@ const NavBar = ({
 
  return (
   <>
-    <nav className="fixed top-0 left-0 z-50 w-full bg-[#0F172A]/90 backdrop-blur-md shadow-lg border-b border-[#38BDF8]/20">
+    <nav className="fixed top-0 left-0 z-[999] w-full bg-[#0F172A]/90 backdrop-blur-md shadow-lg border-b border-[#38BDF8]/20">
 
       <div className="max-w-7xl mx-auto flex items-center justify-between px-4 md:px-8 py-3">
 
@@ -143,12 +144,22 @@ const NavBar = ({
   )}
 </button>
 
-          <button
-            className="text-2xl text-[#38BDF8]"
-            onClick={onLoginClick}
-          >
-            <FaUserCircle />
-          </button>
+          <div className="relative">
+
+  <button
+    className="text-2xl text-[#38BDF8]"
+    onClick={onLoginClick}
+  >
+    <FaUserCircle />
+  </button>
+
+  {showLoginReminder && (
+    <div className="absolute top-12 right-0 bg-red-500 text-white px-3 py-2 rounded-lg text-sm shadow-lg whitespace-nowrap animate-bounce">
+      Login to continue checkout
+    </div>
+  )}
+
+</div>
 
           <button
             className="text-2xl text-[#38BDF8]"

@@ -5,11 +5,31 @@ import React, { useEffect, useState } from "react";
 import api from "../services/api";
 import { motion } from "framer-motion";
 import { useCart } from "./CartContext";
+import { useUser } from "./UserContext";
+import CheckoutPopup from "./CheckoutPopup";
 
 
 
-const FeaturedPerfumes = () => {
+const FeaturedPerfumes = ({ onRequireLogin }) => {
   const { dispatch } = useCart();
+  const { user } = useUser();
+
+const [checkoutOpen, setCheckoutOpen] = useState(false);
+const [buyNowProduct, setBuyNowProduct] = useState(null);
+const handleBuyNow = (product) => {
+
+  if (!user) {
+    onRequireLogin();
+    return;
+  }
+
+  setBuyNowProduct({
+    ...product,
+    quantity: 1,
+  });
+
+  setCheckoutOpen(true);
+};
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -29,6 +49,7 @@ const FeaturedPerfumes = () => {
   }, []);
 
   return (
+    <>
       <section
   className="
   py-14
@@ -129,12 +150,11 @@ py-3 rounded-full border-2 border-[#38BDF8] text-[#38BDF8] font-semibold bg-[#0F
                         Add to Cart
                       </button>
                       <button
-                        onClick={() => dispatch({ type: "ADD_TO_CART", product: perfume })}
-                        className="flex-1 px-5
-py-3 rounded-full border-2 border-[#38BDF8] text-[#0F172A] font-semibold bg-[#38BDF8] hover:bg-[#C0C0C0] hover:text-[#38BDF8] transition-all duration-300"
-                      >
-                        Buy Now
-                      </button>
+    onClick={() => handleBuyNow(perfume)}
+    className="flex-1 px-5 py-3 rounded-full border-2 border-[#38BDF8] text-[#0F172A] font-semibold bg-[#38BDF8] hover:bg-[#C0C0C0] hover:text-[#38BDF8] transition-all duration-300"
+>
+    Buy Now
+</button>
                     </div>
                   </div>
                 </motion.div>
@@ -143,6 +163,13 @@ py-3 rounded-full border-2 border-[#38BDF8] text-[#0F172A] font-semibold bg-[#38
           </div>
         )}
       </section>
+       <CheckoutPopup
+    open={checkoutOpen}
+    onClose={() => setCheckoutOpen(false)}
+    user={user}
+    cartItems={buyNowProduct ? [buyNowProduct] : []}
+  />
+</>
     );
   }
   export default FeaturedPerfumes;

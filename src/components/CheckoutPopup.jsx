@@ -37,7 +37,7 @@ const CheckoutPopup = ({ open, onClose, user, cartItems }) => {
 
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+    <div className="fixed inset-0 z-[300] pt-20 flex items-center justify-center bg-black/40 backdrop-blur-sm">
       <div className="bg-[#0F172A] border-2 border-[#C0C0C0] text-[#C0C0C0] px-8 py-8 rounded-3xl shadow-2xl w-full max-w-md flex flex-col items-center relative animate-fadeInUp">
         <button className="absolute top-3 right-4 text-[#38BDF8] text-2xl font-bold" onClick={onClose}>&times;</button>
         <h2 className="text-2xl md:text-3xl font-display font-light text-[#38BDF8] mb-6 tracking-wide">Checkout</h2>
